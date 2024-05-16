@@ -31,3 +31,7 @@ def get_logger() -> logging.Logger:
     logger.propagate = False
     logger.addHandler(stream_handler)
     return logger
+
+
+if __name__ == "__main__":
+    main()
