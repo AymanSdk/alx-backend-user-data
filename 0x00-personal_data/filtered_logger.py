@@ -1,11 +1,12 @@
-#!/usr/bin/python3
-"""A Module for filtering and logging messages.
+#!/usr/bin/env python3
+"""A module for filtering logs.
 """
 import os
 import re
 import logging
 import mysql.connector
 from typing import List
+
 
 patterns = {
     'extract': lambda x, y: r'(?P<field>{})=[^{}]*'.format('|'.join(x), y),
@@ -24,18 +25,19 @@ def filter_datum(
 
 
 def get_logger() -> logging.Logger:
-    """Returns a logging object.
+    """Creates a new logger for user data.
     """
-    logger = logging.getLogger('user_data')
-    stream_handler = logging.setFormatter(RedactingFormatter(PII_FIELDS))
-    stream_handler.setLevel(logging.INFO)
+    logger = logging.getLogger("user_data")
+    stream_handler = logging.StreamHandler()
+    stream_handler.setFormatter(RedactingFormatter(PII_FIELDS))
+    logger.setLevel(logging.INFO)
     logger.propagate = False
     logger.addHandler(stream_handler)
     return logger
 
 
 def get_db() -> mysql.connector.connection.MySQLConnection:
-    """Returns a connector to a MySQL database.
+    """Creates a connector to a database.
     """
     db_host = os.getenv("PERSONAL_DATA_DB_HOST", "localhost")
     db_name = os.getenv("PERSONAL_DATA_DB_NAME", "")
@@ -52,7 +54,7 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
 
 
 def main():
-    """Connects to a database and retrieves data to be logged.
+    """Logs the information about user records in a table.
     """
     fields = "name,email,phone,ssn,password,ip,last_login,user_agent"
     columns = fields.split(',')
