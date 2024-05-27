@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """user module
 """
-from sqlalchemy import column, string, Integer
+from sqlalchemy import Column, String, Integer
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
@@ -11,6 +11,7 @@ class User(Base):
     """
     __tablename__ = 'users'
     id = Column(Integer, primary_key=True)
-    name = Column(String(128), nullable=False)
-    email = Column(String(128), nullable=False)
-    password = Column(String(128), nullable=False)
+    email = Column(String(250), nullable=False)
+    hashed_password = Column(String(250), nullable=False)
+    session_id = Column(String(250), nullable=True)
+    reset_token = Column(String(250), nullable=True)
